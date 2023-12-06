@@ -100,6 +100,7 @@ class StudentController extends Controller
     public function editStudent(Request $request)
     {
         $request->validate([
+            'id' => 'required',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',

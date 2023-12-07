@@ -34,16 +34,14 @@ class StudentController extends Controller
             $statu = $status[0];
             $space = strpos($statu, ' ');
 
-            if ($space !== null) {
+            if ($space !== false) {
                 $statu = substr($statu, 0, $space);
-
                 if ($statu == 'HABILITADO') {
                     $avalibles = explode(" ", $status[0]);
                 }
             } else {
-                $status = $status[0];
+                $statu = $status[0];
             }
-
             $student_data = [];
             $student_data['name'] = $nombreCompletoCliente;
             $student_data['phone'] = $telefono;
@@ -68,9 +66,13 @@ class StudentController extends Controller
             }
 
             foreach ($saps as $sap) {
+
                 $name_sap = substr($sap, 4);
 
-                if (count(array_intersect([$name_sap], $avalibles)) > 0) {
+                if ($statu === 'CONTADO') {
+                    $course_id = CoursesController::searchCourse($sap);
+                    StudentCoursesController::create($student_id, $course_id);
+                } elseif (count(array_intersect([$name_sap], $avalibles)) > 0) {
                     $course_id = CoursesController::searchCourse($sap);
                     StudentCoursesController::create($student_id, $course_id);
                 }
